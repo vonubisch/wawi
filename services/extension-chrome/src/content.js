@@ -1,3 +1,9 @@
+import $ from "jquery";
+
+import { test } from 'packages/core/interface';
+
+test();
+
 const fallbackFavicon = $('#favicon').attr('href');
 const redFavicon = 'https://colourlex.com/wp-content/uploads/2015/08/Cadmium_red_nr_2_painted_swatch_Lipscher-225-opt.jpg';
 

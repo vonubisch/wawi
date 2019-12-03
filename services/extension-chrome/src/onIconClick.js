@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 function simulateMouseClick(element) {
     const mouseClickEvents = ['mousedown', 'click', 'mouseup'];
     console.log('Clicking', element);
@@ -53,7 +55,7 @@ console.log(makeIndexedList());
 
 const contacts = makeIndexedList();
 
-let clickContacts = ['Shirley', 'Nuno', 'Vincent', 'Henrica', 'Floris'];
+let clickContacts = ['John'];
 
 let currentIntervalIndex = 0;
 

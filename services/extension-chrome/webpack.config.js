@@ -1,0 +1,21 @@
+const path = require('path');
+const glob = require('glob');
+
+const getFilename = fileName => path.basename(fileName, path.extname(fileName));
+
+const entries = {};
+glob.sync('./src/*.js').forEach(path => entries[getFilename(path)] = path);
+
+module.exports = {
+    entry: entries,
+    mode: 'production',
+    output: {
+        path: path.resolve(__dirname, 'build'),
+        filename: '[name].js'
+    },
+    resolve: {
+        alias: {
+            packages: path.resolve(__dirname, '../../packages/')
+        }
+    }
+};
