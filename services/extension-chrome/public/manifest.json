@@ -9,8 +9,9 @@
         }
     ],
     "background" : {
+        "persistent": false,
         "scripts" : ["background.js"]
     },
     "browser_action": {},
-    "permissions": ["activeTab"]
+    "permissions": ["activeTab", "alarms"]
 }
