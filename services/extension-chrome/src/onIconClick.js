@@ -1,37 +1,12 @@
-import $ from "jquery";
+import $ from 'jquery';
 
-function simulateMouseClick(element) {
-    const mouseClickEvents = ['mousedown', 'click', 'mouseup'];
-    console.log('Clicking', element);
-    mouseClickEvents.forEach(mouseEventType =>
-        element.dispatchEvent(
-            new MouseEvent(mouseEventType, {
-                view: window,
-                bubbles: true,
-                cancelable: true,
-                buttons: 1
-            })
-        )
-    );
-}
-
-const getContactElement = index => {
-    return document.querySelector(`#pane-side > div:first-child > div:first-child > div:first-child > div:nth-child(${index})`);
-}
-
-const getClickableElement = (_contactElement, _first = false) => {
-    if (_first) {
-        console.log('First');
-        const result = _contactElement.querySelector(`div:first-child > div:first-child > div:first-child > div:first-child`);    
-        return result;
-    }
-    return _contactElement.querySelector(`div:first-child > div:first-child`);
-}
+// import sendMessage from 'packages/core/actions/chat/sendMessage';
+import typeMessage from 'packages/core/actions/chat/typeMessage';
+import openChat    from 'packages/core/actions/chatlist/openChat';
 
 const getNameFromContactElement = _contactElement => {
     return $(_contactElement).find(`div:nth-child(2) > div:first-child > div:first-child > span > span`).html();
 }
-
 const makeIndexedList = () => {
     const contactList = [];
     let i = 0;
@@ -47,28 +22,10 @@ const makeIndexedList = () => {
     return contactList.sort((a, b) => a.position - b.position);
 }
 
-const findIndexByName = (_list, _name) => {
-    return _list.find(_c => _c.name === _name).index + 1;
-}
-
-console.log(makeIndexedList());
-
 const contacts = makeIndexedList();
 
-let clickContacts = ['John'];
-
-let currentIntervalIndex = 0;
-
-let timerId = setInterval(() => {
-
-    let contactIndex = findIndexByName(contacts, clickContacts[currentIntervalIndex]);
-    let contact = getContactElement(contactIndex);
-    console.log(contactIndex, contact, (contactIndex === 1));
-    simulateMouseClick(getClickableElement(contact, (contactIndex === 1)));
-
-    currentIntervalIndex++;
-
-}, 4000);
-
-
-setTimeout(() => { clearInterval(timerId); console.log('stopped'); }, 22000);
+openChat(contacts, 'Papa');
+setTimeout(() => {
+    typeMessage('test');
+    // sendMessage();
+}, 2000);
