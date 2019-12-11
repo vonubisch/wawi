@@ -1,6 +1,8 @@
 const path = require('path');
 const glob = require('glob');
 
+const webpack = require('webpack');
+
 const getFilename = fileName => path.basename(fileName, path.extname(fileName));
 
 const entries = {};
@@ -17,5 +19,10 @@ module.exports = {
         alias: {
             packages: path.resolve(__dirname, '../../packages/')
         }
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('development')
+        })
+    ],
 };

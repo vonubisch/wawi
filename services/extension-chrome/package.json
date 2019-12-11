@@ -10,6 +10,17 @@
     "license": "ISC",
     "dependencies": {
         "jquery": "^3.4.1",
-        "lodash": "^4.17.15"
+        "lodash": "^4.17.15",
+        "react-chrome-redux": "^2.0.0-alpha.5",
+        "redux": "^4.0.4",
+        "redux-devtools-extension": "^2.13.8",
+        "redux-logger": "^3.0.6",
+        "redux-thunk": "^2.3.0",
+        "webext-redux": "^2.1.6"
+    },
+    "devDependencies": {
+        "remote-redux-devtools": "^0.5.16",
+        "webpack": "^4.41.2",
+        "webpack-cli": "^3.3.10"
     }
 }
