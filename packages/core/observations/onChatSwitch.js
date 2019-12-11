@@ -3,7 +3,9 @@ import last from 'lodash/last';
 
 export default function onChatSwitch(mutations) {
     
-    if (last(get(mutations, [0, 'target', 'innerText'], '').split('\n')) === 'Type a message') {
+    if (
+        last(get(mutations, [0, 'target', 'innerText'], '').split('\n')) === 'Type a message'
+    ) {
         const name = get(get(mutations, [0, 'target', 'innerText'], '').split('\n'), [0], '');
 
         if (name === 'Search or start new chat' || name === 'Contact info') {

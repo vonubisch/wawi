@@ -21,9 +21,7 @@ const check = (data, observations) => {
     return events;
 }
 
-const observer = {
+export default {
     observe,
     check,
-}
-
-export default observer;
+};
