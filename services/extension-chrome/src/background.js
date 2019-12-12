@@ -1,43 +1,20 @@
 import { applyMiddleware, createStore, compose, combineReducers } from 'redux';
 import { wrapStore } from 'webext-redux';
 import reduxLogger from 'redux-logger';
-// import { composeWithDevTools } from 'redux-devtools-extension';
 import { composeWithDevTools } from 'remote-redux-devtools';
 import thunkMiddleware from 'redux-thunk';
-import get from 'lodash/get';
+import * as firebase from 'firebase/app';
+import 'firebase/analytics';
+import 'firebase/auth';
+import 'firebase/firestore';
 
-const currentChatReducer = (state = {}, action) => {
-    switch (action.type) {
-        case 'onChatSwitch':
-            const name = get(action, 'payload.event.name', null);
-            const online = get(action, 'payload.event.online', false);
-            const messages = get(action, 'payload.event.messages', {});
-            return { name, online, messages };
+import firebaseConfig from 'config/firebase';
 
-        default:
-            return state;
-    }
-}
+import { appReducer, currentChatReducer, chatlistReducer } from 'packages/core/redux/reducers';
 
-const appReducer = (state = {}, action) => {
-    switch (action.type) {
-        case 'onAppLoad':
-            return { loaded: true };
+firebase.initializeApp(firebaseConfig);
 
-        default:
-            return state;
-    }
-}
-
-const contactsReducer = (state = {}, action) => {
-    switch (action.type) {
-        case 'onAppLoad':
-            return get(action, 'payload.event.contacts', []);
-
-        default:
-            return state;
-    }
-}
+const firestore = firebase.firestore();
 
 const middlewares = [
     thunkMiddleware,
@@ -51,30 +28,42 @@ const initialState = {
     app: {
         loaded: false,
     },
-    contacts: [],
+    chatlist: [],
 };
 
-// const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+const composeEnhancers = composeWithDevTools({ realtime: true, port: 8000 });
 
 const store = createStore(
     combineReducers({
         app: appReducer,
         currentChat: currentChatReducer,
-        contacts: contactsReducer,
+        chatlist: chatlistReducer,
     }),
     initialState,
-    composeWithDevTools(
+    composeEnhancers(
         applyMiddleware(...middlewares),
     )
 );
 
+const createInstructionEvent = (type = 'default', payload = {}) => ({
+    type,
+    payload,
+});
+
 wrapStore(store);
 
+firestore.collection('instructions').onSnapshot(snap => {
+    snap.docs.forEach(doc => {
+        const data = doc.data();
+        store.dispatch(createInstructionEvent(data.type, {}));
+    });
+});
+
 chrome.browserAction.onClicked.addListener(function (tab) {
-    chrome.tabs.executeScript(null, { file: "onIconClick.js" });
+    chrome.tabs.executeScript(null, { file: 'onIconClick.js' });
 });
 
 chrome.alarms.create({ periodInMinutes: 1 });
 chrome.alarms.onAlarm.addListener(function () {
-    console.log("Hello, world!", new Date())
+    console.log('Hello, world!', new Date())
 });

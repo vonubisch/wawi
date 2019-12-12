@@ -17,7 +17,8 @@ module.exports = {
     },
     resolve: {
         alias: {
-            packages: path.resolve(__dirname, '../../packages/')
+            packages: path.resolve(__dirname, '../../packages/'),
+            config: path.resolve(__dirname, '../../config/')
         }
     },
     plugins: [

@@ -4,22 +4,24 @@
     "description": "",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "webpack --config webpack.config.js && cp -rf ./public/* ./build/"
+        "build": "webpack --config webpack.config.js && cp -rf ./public/* ./build/",
+        "remotedev": "remotedev --hostname=localhost --port=8000"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "firebase": "^7.5.2",
         "jquery": "^3.4.1",
         "lodash": "^4.17.15",
         "react-chrome-redux": "^2.0.0-alpha.5",
         "redux": "^4.0.4",
-        "redux-devtools-extension": "^2.13.8",
         "redux-logger": "^3.0.6",
         "redux-thunk": "^2.3.0",
+        "remote-redux-devtools": "^0.5.16",
         "webext-redux": "^2.1.6"
     },
     "devDependencies": {
-        "remote-redux-devtools": "^0.5.16",
+        "remotedev-server": "^0.3.1",
         "webpack": "^4.41.2",
         "webpack-cli": "^3.3.10"
     }
