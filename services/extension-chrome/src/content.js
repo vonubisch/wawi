@@ -1,10 +1,15 @@
-import WhatsAppWebInterface from 'packages/core';
 import { Store, applyMiddleware } from 'webext-redux';
 import thunkMiddleware from 'redux-thunk';
+import reduxLogger from 'redux-logger';
+import get from 'lodash/get';
+
+import WhatsAppWebInterface from 'packages/core';
 
 import {
     onAppLoad, onChatSwitch, onChatOnline, onChatTyping, onChatOffline
 } from 'packages/core/observations';
+
+import actions from 'packages/core/redux/actions';
 
 const observerOptions = {
     subtree: true,
@@ -15,39 +20,34 @@ const observerOptions = {
     attributeFilter: ['title']
 };
 
-const createActionEvent = (type, event = null) => ({
-    type,
-    payload: { event },
-});
-
 const WAWI = new WhatsAppWebInterface();
 
-const store = applyMiddleware(new Store() , ...[thunkMiddleware]);
+const store = applyMiddleware(new Store() , ...[reduxLogger, thunkMiddleware]);
 
 store.ready().then(() => {
+
+    // WAWI.logger.log('Store ready', getState());
+
+    WAWI.observer.observe(observerOptions, mutations => {
+
+        // WAWI.logger.log(mutations);
     
-    store.dispatch((dispatchEvent, getState) => {
-        
-        WAWI.logger.log('Store ready', getState());
+        WAWI.observer.check(mutations, {
+            onChatSwitch,
+            onChatOnline,
+            onChatOffline,
+            onChatTyping,
+            onAppLoad,
+        }).forEach(event => {
 
-        WAWI.observer.observe(observerOptions, mutations => {
-        
-            WAWI.observer.check(mutations, {
-                onChatSwitch,
-                onChatOnline,
-                onChatOffline,
-                onChatTyping,
-                onAppLoad,
-            }).forEach(event => {
+            const func = get(actions, ['events', event.name]);
 
-                dispatchEvent(createActionEvent(event.name, event.data));
+            if (!func) return;
 
-                WAWI.logger.event(event.name, event);
+            store.dispatch(func(event.data));
 
-            });
-        
-        })
-
+        });
+    
     });
 
 });

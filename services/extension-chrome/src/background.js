@@ -1,20 +1,20 @@
-import { applyMiddleware, createStore, compose, combineReducers } from 'redux';
+import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { wrapStore } from 'webext-redux';
 import reduxLogger from 'redux-logger';
 import { composeWithDevTools } from 'remote-redux-devtools';
 import thunkMiddleware from 'redux-thunk';
-import * as firebase from 'firebase/app';
-import 'firebase/analytics';
-import 'firebase/auth';
-import 'firebase/firestore';
+// import * as firebase from 'firebase/app';
+// import 'firebase/analytics';
+// import 'firebase/auth';
+// import 'firebase/firestore';
 
-import firebaseConfig from 'config/firebase';
+// import firebaseConfig from 'config/firebase';
 
 import { appReducer, currentChatReducer, chatlistReducer } from 'packages/core/redux/reducers';
 
-firebase.initializeApp(firebaseConfig);
+// firebase.initializeApp(firebaseConfig);
 
-const firestore = firebase.firestore();
+// const firestore = firebase.firestore();
 
 const middlewares = [
     thunkMiddleware,
@@ -45,19 +45,19 @@ const store = createStore(
     )
 );
 
-const createInstructionEvent = (type = 'default', payload = {}) => ({
-    type,
-    payload,
-});
+// const createInstructionEvent = (type = 'default', payload = {}) => ({
+//     type,
+//     payload,
+// });
 
 wrapStore(store);
 
-firestore.collection('instructions').onSnapshot(snap => {
-    snap.docs.forEach(doc => {
-        const data = doc.data();
-        store.dispatch(createInstructionEvent(data.type, {}));
-    });
-});
+// firestore.collection('instructions').onSnapshot(snap => {
+//     snap.docs.forEach(doc => {
+//         const data = doc.data();
+//         store.dispatch(createInstructionEvent(data.type, {}));
+//     });
+// });
 
 chrome.browserAction.onClicked.addListener(function (tab) {
     chrome.tabs.executeScript(null, { file: 'onIconClick.js' });
