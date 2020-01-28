@@ -51,3 +51,31 @@ store.ready().then(() => {
     });
 
 });
+
+
+const iframe = document.createElement('iframe');
+iframe.src = chrome.extension.getURL('ui.html');
+iframe.className = 'wawi-ui';
+iframe.frameBorder = 0;
+
+const appRoot = document.getElementById('app');
+
+const button = document.createElement('img');
+button.src = chrome.extension.getURL('button.png');
+button.className = 'wawi-button';
+button.onclick = () => {
+    iframe.classList.add('wawi-ui-open');
+    appRoot.classList.add('wawi-approot-blur');
+    button.classList.add('wawi-button-hidden');
+}
+
+document.body.prepend(iframe);
+document.body.prepend(button);
+
+chrome.runtime.onMessage.addListener(function(message) {
+    if (message == 'hide_ui') {
+        iframe.classList.remove('wawi-ui-open');
+        appRoot.classList.remove('wawi-approot-blur');
+        button.classList.remove('wawi-button-hidden');
+    }
+});

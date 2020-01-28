@@ -59,6 +59,10 @@ wrapStore(store);
 //     });
 // });
 
+chrome.runtime.onMessage.addListener(function(message, sender) {
+    chrome.tabs.sendMessage(sender.tab.id, message);
+});
+
 chrome.browserAction.onClicked.addListener(function (tab) {
     chrome.tabs.executeScript(null, { file: 'onIconClick.js' });
 });

@@ -5,7 +5,8 @@
     "content_scripts": [
         {
           "matches": ["https://web.whatsapp.com/*"],
-          "js": ["content.js"]
+          "js": ["content.js"],
+          "css": ["content.css"]
         }
     ],
     "background" : {
@@ -13,5 +14,6 @@
         "scripts" : ["background.js"]
     },
     "browser_action": {},
+    "web_accessible_resources" : ["ui.html", "ui.css", "button.png"],
     "permissions": ["activeTab", "alarms"]
 }

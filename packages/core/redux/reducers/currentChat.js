@@ -1,8 +1,10 @@
 import get from 'lodash/get';
 
+import { type as onChatSwitch } from '../actions/events/onChatSwitch';
+
 export default function currentChatReducer(state = {}, action) {
     switch (action.type) {
-        case 'onChatSwitch':
+        case onChatSwitch:
             const name = get(action, 'payload.event.name', null);
             const online = get(action, 'payload.event.online', false);
             const messages = get(action, 'payload.event.messages', {});
