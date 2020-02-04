@@ -1,3 +1,5 @@
+import render from './app/render';
+
 import openChat from './chatlist/openChat';
 import typeMessage from './chat/typeMessage';
 import sendMessage from './chat/sendMessage';
@@ -9,6 +11,9 @@ import onChatTyping from './events/onChatTyping';
 import onAppLoad from './events/onAppLoad';
 
 const actions = {
+    app: {
+        render,
+    },
     events: {
         onChatSwitch,
         onChatOnline,

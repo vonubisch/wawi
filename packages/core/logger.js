@@ -4,6 +4,12 @@ const log = (...args) => {
     console.groupEnd();
 }
 
+const mutations = data => {
+    console.group(`%cWhatsPlus: Mutation`, 'color: green');
+    console.log(data);
+    console.groupEnd();
+}
+
 const event = (message, event) => {
     console.group(`%cWhatsPlus`, 'color: green', message);
     console.log(`%cName:`, 'color: gray', event.name);
@@ -15,7 +21,8 @@ const event = (message, event) => {
 
 const logger = {
     log,
-    event
+    event,
+    mutations
 };;
 
 export default logger;

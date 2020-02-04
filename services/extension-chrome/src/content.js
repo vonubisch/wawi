@@ -1,7 +1,7 @@
 import { Store, applyMiddleware } from 'webext-redux';
 import thunkMiddleware from 'redux-thunk';
-import reduxLogger from 'redux-logger';
 import get from 'lodash/get';
+import throttle from 'lodash/throttle';
 
 import WhatsAppWebInterface from 'packages/core';
 
@@ -22,15 +22,19 @@ const observerOptions = {
 
 const WAWI = new WhatsAppWebInterface();
 
-const store = applyMiddleware(new Store() , ...[reduxLogger, thunkMiddleware]);
+const store = applyMiddleware(new Store() , ...[thunkMiddleware]);
 
 store.ready().then(() => {
 
     // WAWI.logger.log('Store ready', getState());
 
+    WAWI.observer.observe(observerOptions, throttle(() => {
+        store.dispatch(actions.app.render());
+    }, 1000));
+
     WAWI.observer.observe(observerOptions, mutations => {
 
-        // WAWI.logger.log(mutations);
+        WAWI.logger.mutations(mutations);
     
         WAWI.observer.check(mutations, {
             onChatSwitch,

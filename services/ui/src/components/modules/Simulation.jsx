@@ -1,11 +1,16 @@
-import React, { useState }  from 'react';
+import React, { useState, useRef, useEffect }  from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
+import parseHTML from 'html-react-parser';
 import { Grid, Menu, Comment, Header, Input, Icon, Image } from 'semantic-ui-react';
 
 const Chat = ({ name, avatar, online, messages, sendMessage }) => {
-    const [currentMessage, setCurrentMessage] = useState(''); // eslint-disable-line no-unused-vars
+    const [currentMessage, setCurrentMessage] = useState('');
+    const el = useRef(null);
+    useEffect(() => {
+        el.current.scrollIntoView({ block: 'end', behavior: 'smooth' });
+    });
     return (
         <>
             <Comment.Group>
@@ -20,7 +25,7 @@ const Chat = ({ name, avatar, online, messages, sendMessage }) => {
                     </Header.Content>
                     {name}
                 </Header>
-                <div style={{height: 400, overflowY: 'scroll'}}>
+                <div style={{height: 400, overflowY: 'scroll'}} ref={el}>
                     {messages.map((message, i) => (
                         <Message 
                             key={i} 
@@ -66,7 +71,7 @@ const Message = ({ type, name, text, date }) => {
                 <Comment.Metadata>
                     <div>{date}</div>
                 </Comment.Metadata>
-                <Comment.Text>{text}</Comment.Text>
+                <Comment.Text>{parseHTML(text)}</Comment.Text>
             </Comment.Content>
         </Comment>
     );
