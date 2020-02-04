@@ -24,6 +24,8 @@ const middlewares = [
 const initialState = {
     currentChat: {
         name: null,
+        online: null,
+        messages: [],
     },
     app: {
         loaded: false,

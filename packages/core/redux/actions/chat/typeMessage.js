@@ -19,6 +19,6 @@ const endTyping = () => ({
 
 export default function typeMessage({ message }) {
     return function(dispatch) {
-        return dispatch(beginTyping(message)).then(() => setTimeout(() => dispatch(endTyping()), 5000));
+        return dispatch(beginTyping(message)).then(() => setTimeout(() => dispatch(endTyping()), 1000));
     };
 };

@@ -1,18 +1,19 @@
 {
-  "name": "wawi",
-  "version": "1.0.0",
-  "description": "wawi",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vonubisch/wawi.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/vonubisch/wawi/issues"
-  },
-  "homepage": "https://github.com/vonubisch/wawi#readme"
+    "name": "wawi",
+    "version": "1.0.0",
+    "description": "wawi",
+    "scripts": {
+        "build:all": "cd bin/build && sh all.sh",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/vonubisch/wawi.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/vonubisch/wawi/issues"
+    },
+    "homepage": "https://github.com/vonubisch/wawi#readme"
 }

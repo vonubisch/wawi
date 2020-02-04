@@ -1,5 +1,6 @@
 import openChat from './chatlist/openChat';
 import typeMessage from './chat/typeMessage';
+import sendMessage from './chat/sendMessage';
 
 import onChatSwitch from './events/onChatSwitch';
 import onChatOnline from './events/onChatOnline';
@@ -20,6 +21,7 @@ const actions = {
     },
     chat: {
         typeMessage,
+        sendMessage,
     }
 };
 

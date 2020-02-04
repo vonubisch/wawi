@@ -49,12 +49,36 @@ store.ready().then(() => {
         });
     
     });
+    
+    chrome.runtime.onMessage.addListener(function(message) {
+        console.log('message: ', message);
+        switch (true) {
+            case message === 'hide_ui': {
+                iframe.classList.remove('wawi-ui-open');
+                appRoot.classList.remove('wawi-approot-blur');
+                button.classList.remove('wawi-button-hidden');
+            } break;
+    
+            case (get(message, 'type') === 'chromex.dispatch' && get(message, 'payload.type') === '@ui/instruction/openChat'): {
+                store.dispatch(actions.chatlist.openChat({ 
+                    name: get(message, 'payload.name'),
+                }));
+            } break;
+
+            case (get(message, 'type') === 'chromex.dispatch' && get(message, 'payload.type') === '@ui/instruction/sendMessage'): {
+                store.dispatch(actions.chat.typeMessage({ message: get(message, 'payload.text', 'foo') }))
+                    .then(() => store.dispatch(actions.chat.sendMessage()));
+            } break;
+    
+            default: 
+        }
+    });
 
 });
 
 
 const iframe = document.createElement('iframe');
-iframe.src = chrome.extension.getURL('ui.html');
+iframe.src = chrome.extension.getURL('ui/index.html');
 iframe.className = 'wawi-ui';
 iframe.frameBorder = 0;
 
@@ -71,11 +95,3 @@ button.onclick = () => {
 
 document.body.prepend(iframe);
 document.body.prepend(button);
-
-chrome.runtime.onMessage.addListener(function(message) {
-    if (message == 'hide_ui') {
-        iframe.classList.remove('wawi-ui-open');
-        appRoot.classList.remove('wawi-approot-blur');
-        button.classList.remove('wawi-button-hidden');
-    }
-});

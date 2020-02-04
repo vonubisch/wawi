@@ -1,6 +1,12 @@
+const type = '@event/onChatOffline';
+
 export default function onChatOffline(event) {
     return {
-        type: '@event/onChatOffline',
+        type,
         payload: { event }
     }
+}
+
+export {
+    type,
 }
