@@ -65,12 +65,32 @@ store.ready().then(() => {
     
             case (get(message, 'type') === 'chromex.dispatch' && get(message, 'payload.type') === '@ui/instruction/openChat'): {
                 store.dispatch(actions.chatlist.openChat({ 
-                    name: get(message, 'payload.name'),
+                    index: get(message, 'payload.data.index', null),
+                    name: get(message, 'payload.data.name', null),
+                }));
+            } break;
+
+            case (get(message, 'type') === 'chromex.dispatch' && get(message, 'payload.type') === '@ui/instruction/openNewChat'): {
+                store.dispatch(actions.chatlist.openNewChat({ 
+                    // index: get(message, 'payload.data.index', null),
+                    name: get(message, 'payload.data.name', null),
+                }));
+            } break;
+
+            case (get(message, 'type') === 'chromex.dispatch' && get(message, 'payload.type') === '@ui/instruction/scrollTo'): {
+                store.dispatch(actions.chat.scrollTo({ 
+                    top: get(message, 'payload.data.top', null),
+                }));
+            } break;
+
+            case (get(message, 'type') === 'chromex.dispatch' && get(message, 'payload.type') === '@ui/instruction/chatlist/scrollTo'): {
+                store.dispatch(actions.chatlist.scrollTo({ 
+                    top: get(message, 'payload.payload.top', null),
                 }));
             } break;
 
             case (get(message, 'type') === 'chromex.dispatch' && get(message, 'payload.type') === '@ui/instruction/sendMessage'): {
-                store.dispatch(actions.chat.typeMessage({ message: get(message, 'payload.text', 'foo') }))
+                store.dispatch(actions.chat.typeMessage({ message: get(message, 'payload.text', '') }))
                     .then(() => store.dispatch(actions.chat.sendMessage()));
             } break;
     

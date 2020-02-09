@@ -1,13 +1,16 @@
 import instr_getChats from '../../../instructions/chatlist/getChats';
+import instr_getMessages from '../../../instructions/chat/getMessages';
 
 const type = '@app/render';
 
 const beginRender = () => {
     const chatlist = instr_getChats();
+    const messages = instr_getMessages();
     return {
         type: `${type}/begin`,
         payload: {
-            chatlist
+            chatlist,
+            messages
         }
     };
 };

@@ -10,7 +10,7 @@ import thunkMiddleware from 'redux-thunk';
 
 // import firebaseConfig from 'config/firebase';
 
-import { appReducer, currentChatReducer, chatlistReducer } from 'packages/core/redux/reducers';
+import { appReducer, currentChatReducer, chatlistReducer, eventsReducer } from 'packages/core/redux/reducers';
 
 // firebase.initializeApp(firebaseConfig);
 
@@ -30,6 +30,7 @@ const initialState = {
     app: {
         loaded: false,
     },
+    events: [],
     chatlist: [],
 };
 
@@ -40,6 +41,7 @@ const store = createStore(
         app: appReducer,
         currentChat: currentChatReducer,
         chatlist: chatlistReducer,
+        events: eventsReducer,
     }),
     initialState,
     composeEnhancers(

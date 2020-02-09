@@ -1,6 +1,10 @@
+const type = '@event/onChatTyping';
+
 export default function onChatTyping(event) {
     return {
-        type: '@event/onChatTyping',
+        type,
         payload: { event }
     }
 }
+
+export { type }

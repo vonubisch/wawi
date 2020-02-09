@@ -4,6 +4,9 @@
     "description": "wawi",
     "scripts": {
         "build:all": "cd bin/build && sh all.sh",
+        "build:extension": "cd bin/build && sh extension.sh",
+        "start:remotedev": "cd services/extension-chrome && yarn start",
+        "start:ui": "cd services/ui && yarn start",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {

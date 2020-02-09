@@ -1,41 +1,43 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Tab } from 'semantic-ui-react';
 
-import Simulation from '../../modules/Simulation.jsx';
+import Simulation from '../../modules/simulation/index.js';
+import Logger from '../../modules/logger/Logger.jsx';
 import Module from './Module.jsx';
+
+import modules from '../../modules.js';
 
 const installedModules = {
     simulation: Simulation,
+    logger: Logger,
 };
 
 const EmptyModule = () => (<div />);
 
-const Modules = () => {
-    const panes = [{
-        menuItem: { key: 'simulation', icon: 'circle outline', content: 'Simulation' },
-    }, {
-        menuItem: { key: 'dev', icon: 'check circle outline', content: 'Development' },
-    }, {
-        menuItem: { key: 'logger', icon: 'check circle outline', content: 'Logger' },
-    }, {
-        menuItem: { key: 'autoreply', icon: 'circle outline', content: 'Auto reply' },
-    }, {
-        menuItem: { key: 'quickreplies', icon: 'circle outline', content: 'Quick replies' },
-    }, {
-        menuItem: { key: 'customflows', icon: 'circle outline', content: 'Custom flows' },
-    }, {
-        menuItem: { key: 'contact', icon: 'circle outline', content: 'Contact management' },
-    }, {
-        menuItem: { key: 'export', icon: 'circle outline', content: 'Export data' },
-    }, {
-        menuItem: { key: 'sync', icon: 'circle outline', content: 'API' },
-    }].map(item => {
-        const Component = installedModules[item.menuItem.key] || EmptyModule;
+const Modules = ({ activeModules, subscription, moduleEnable, moduleDisable }) => {
+
+    const panes = Object.entries(modules).map(([key, module]) => {
+        const Component = installedModules[key] || EmptyModule;
+        const enabled = activeModules.includes(key);
+        const available = module.subscription.includes(subscription);
         return {
-            ...item,
+            menuItem: { 
+                key, 
+                icon: enabled ? 'circle' : 'circle outline', 
+                content: module.title,
+                disabled: !available
+            },
             render: () => (
-                <Module title={item.menuItem.content}>
+                <Module 
+                    enabled={enabled}
+                    available={available}
+                    title={module.title}
+                    description={module.description}
+                    moduleEnable={() => moduleEnable(key)}
+                    moduleDisable={() => moduleDisable(key)}
+                >
                     <Component />
                 </Module>
             )
@@ -49,6 +51,13 @@ const Modules = () => {
             renderActiveOnly
         />
     );
+};
+
+Modules.propTypes = {
+    activeModules: PropTypes.array,
+    subscription: PropTypes.string,
+    moduleEnable: PropTypes.func,
+    moduleDisable: PropTypes.func,
 };
 
 export default Modules;

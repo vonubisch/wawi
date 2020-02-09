@@ -188,7 +188,7 @@
       "no-unmodified-loop-condition": 0,
       "no-unneeded-ternary": 0,
       "no-unused-expressions": 0,
-      "no-unused-vars": ["error", { "caughtErrorsIgnorePattern": "^(ignore.*|_.+)", "argsIgnorePattern": "^(next|_.+)$" }],
+    //   "no-unused-vars": ["warning", { "caughtErrorsIgnorePattern": "^(ignore.*|_.+)", "argsIgnorePattern": "^(next|_.+)$" }],
       "no-use-before-define": 0,
       "no-useless-call": 0,
       "no-useless-concat": 0,
