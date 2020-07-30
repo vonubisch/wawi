@@ -1,24 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Menu, Modal, Label } from 'semantic-ui-react';
+import get from 'lodash/get';
+import { Menu, Modal, Image } from 'semantic-ui-react';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 
 import Modules from './Modules.jsx';
 
-const UI = ({ closeUI, ...props }) => {
+import logo from 'images/logo.png';
+
+const UI = ({ closeUI, activeModules, ...props }) => {
     const subscription = 'free';
-    const defaultActiveModules = ['simulation', 'logger'];
-    const [activeModules, setActiveModule] = React.useState(defaultActiveModules);
-    const moduleEnable = key => {
-        props.enableModule(key);
-        return setActiveModule(!activeModules.includes(key) ? [...activeModules, key] : activeModules);
-    };
-    const moduleDisable = key => {
-        props.disableModule(key);
-        return setActiveModule(activeModules.filter(v => v !== key));
-    };
     return (
         <Modal
             open={true}
@@ -27,24 +20,27 @@ const UI = ({ closeUI, ...props }) => {
             closeIcon={true}
             onClose={closeUI}
         >
-            <Modal.Content style={{ paddingTop: 60 }}>
+            <Modal.Content style={{ paddingTop: 85 }}>
                 <Menu fixed="top">
-                    <Menu.Item name="WAWI" header />
-                    <Menu.Menu position="right">
+                    <Menu.Item style={{padding: 10}}>
+                        <Image 
+                            src={logo}
+                        />
+                    </Menu.Item>
+                    {/* <Menu.Menu position="right">
                         <Menu.Item>
                             <Label 
-                                content="Free Edition" 
-                                icon="star" 
-                                color="red" 
+                                content="beta"
+                                color="gray" 
                             />
                         </Menu.Item>
-                    </Menu.Menu>
+                    </Menu.Menu> */}
                 </Menu>
                 <Modules 
                     activeModules={activeModules} 
                     subscription={subscription}
-                    moduleEnable={moduleEnable}
-                    moduleDisable={moduleDisable}
+                    moduleEnable={props.enableModule}
+                    moduleDisable={props.disableModule}
                 />
             </Modal.Content>
         </Modal>
@@ -52,6 +48,7 @@ const UI = ({ closeUI, ...props }) => {
 };
 
 UI.propTypes = {
+    activeModules: PropTypes.array,
     closeUI: PropTypes.func,
     enableModule: PropTypes.func,
     disableModule: PropTypes.func,
@@ -60,11 +57,11 @@ UI.propTypes = {
 export default compose(
     connect(
         state => ({ 
-            modules: state && state.modules || [], 
+            activeModules: get(state, 'modules.active', []), 
         }),
         dispatch => ({
-            enableModule: key => dispatch({ type: '@ui/modules/enable', key }),
-            disableModule: key => dispatch({ type: '@ui/modules/disable', key }),
+            enableModule: key => dispatch({ type: '@modules/enable', payload: { key } }),
+            disableModule: key => dispatch({ type: '@modules/disable', payload: { key } }),
         }) 
     )
 )(UI);

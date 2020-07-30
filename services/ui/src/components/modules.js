@@ -9,10 +9,15 @@ export default {
         description: 'Chronological order of key events',
         subscription: ['free', 'standard', 'premium'],
     },
+    darkmode: { 
+        title: 'Dark mode',
+        description: 'Darker themed version by Author',
+        subscription: ['standard', 'premium'],
+    },
     quickreplies: { 
         title: 'Quick replies',
         description: 'Visual representation of the current state',
-        subscription: ['free', 'premium'],
+        subscription: ['standard', 'premium'],
     },
     autoreply: { 
         title: 'Auto reply',
@@ -35,7 +40,7 @@ export default {
         subscription: ['premium'],
     },
     sync: { 
-        title: 'API',
+        title: 'Webhooks / API',
         description: 'Visual representation of the current state',
         subscription: ['premium'],
     },

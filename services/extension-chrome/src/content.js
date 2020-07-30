@@ -24,6 +24,31 @@ const WAWI = new WhatsAppWebInterface();
 
 const store = applyMiddleware(new Store() , ...[thunkMiddleware]);
 
+const createIFrame = () => {
+    const iframe = document.createElement('iframe');
+    iframe.src = chrome.extension.getURL('ui/index.html');
+    iframe.className = 'wawi-ui';
+    iframe.frameBorder = 0;
+    return iframe;
+}
+
+const iframe = createIFrame();
+document.body.prepend(iframe);
+
+const appRoot = document.getElementById('app');
+
+const createButton = () => {
+    const button = document.createElement('img');
+    button.src = chrome.extension.getURL('button.png');
+    button.title = 'Turbo';
+    button.className = 'wawi-button';
+    button.onclick = () => {
+        iframe.classList.add('wawi-ui-open');
+        appRoot.classList.add('wawi-approot-blur');
+    }
+    return button;
+}
+
 store.ready().then(() => {
 
     // WAWI.logger.log('Store ready', getState());
@@ -31,11 +56,11 @@ store.ready().then(() => {
     WAWI.observer.observe(observerOptions, throttle(() => {
         store.dispatch(actions.app.render());
     }, 1000));
-
-    WAWI.observer.observe(observerOptions, mutations => {
-
-        WAWI.logger.mutations(mutations);
     
+    WAWI.observer.observe(observerOptions, mutations => {
+        
+        WAWI.logger.mutations(mutations);
+        
         WAWI.observer.check(mutations, {
             onChatSwitch,
             onChatOnline,
@@ -43,6 +68,15 @@ store.ready().then(() => {
             onChatTyping,
             onAppLoad,
         }).forEach(event => {
+            
+            switch (event.name) {
+                case 'onAppLoad': {
+                    // document.querySelector('head').innerHTML += `<link rel="stylesheet" href="${chrome.extension.getURL('theme-dark.css')}" type="text/css"/>`;
+                    document.querySelector("#side > header > div:nth-child(2) > div > span").prepend(createButton());
+                } break;
+
+                default: 
+            }
 
             const func = get(actions, ['events', event.name]);
 
@@ -60,7 +94,11 @@ store.ready().then(() => {
             case message === 'hide_ui': {
                 iframe.classList.remove('wawi-ui-open');
                 appRoot.classList.remove('wawi-approot-blur');
-                button.classList.remove('wawi-button-hidden');
+            } break;
+
+            case message === 'show_ui': {
+                iframe.classList.add('wawi-ui-open');
+                appRoot.classList.add('wawi-approot-blur');
             } break;
     
             case (get(message, 'type') === 'chromex.dispatch' && get(message, 'payload.type') === '@ui/instruction/openChat'): {
@@ -93,29 +131,25 @@ store.ready().then(() => {
                 store.dispatch(actions.chat.typeMessage({ message: get(message, 'payload.text', '') }))
                     .then(() => store.dispatch(actions.chat.sendMessage()));
             } break;
+
+            case (get(message, 'type') === 'chromex.dispatch' && get(message, 'payload.type') === '@modules/enable'): {
+                switch (get(message, 'payload.payload.key')) {
+                    case 'darkmode':
+                        document.querySelector('head').innerHTML += `<link id="wawi-darkmode" rel="stylesheet" href="${chrome.extension.getURL('theme-dark.css')}" type="text/css"/>`;
+                        break;
+                }
+            } break;
+
+            case (get(message, 'type') === 'chromex.dispatch' && get(message, 'payload.type') === '@modules/disable'): {
+                switch (get(message, 'payload.payload.key')) {
+                    case 'darkmode':
+                        document.querySelector('link#wawi-darkmode').remove();
+                        break;
+                }
+            } break;
     
             default: 
         }
     });
 
 });
-
-
-const iframe = document.createElement('iframe');
-iframe.src = chrome.extension.getURL('ui/index.html');
-iframe.className = 'wawi-ui';
-iframe.frameBorder = 0;
-
-const appRoot = document.getElementById('app');
-
-const button = document.createElement('img');
-button.src = chrome.extension.getURL('button.png');
-button.className = 'wawi-button';
-button.onclick = () => {
-    iframe.classList.add('wawi-ui-open');
-    appRoot.classList.add('wawi-approot-blur');
-    button.classList.add('wawi-button-hidden');
-}
-
-document.body.prepend(iframe);
-document.body.prepend(button);

@@ -10,7 +10,7 @@ import thunkMiddleware from 'redux-thunk';
 
 // import firebaseConfig from 'config/firebase';
 
-import { appReducer, currentChatReducer, chatlistReducer, eventsReducer } from 'packages/core/redux/reducers';
+import { appReducer, currentChatReducer, chatlistReducer, eventsReducer, modulesReducer } from 'packages/core/redux/reducers';
 
 // firebase.initializeApp(firebaseConfig);
 
@@ -32,6 +32,9 @@ const initialState = {
     },
     events: [],
     chatlist: [],
+    modules: {
+        active: [],
+    },
 };
 
 const composeEnhancers = composeWithDevTools({ realtime: true, port: 8000 });
@@ -42,6 +45,7 @@ const store = createStore(
         currentChat: currentChatReducer,
         chatlist: chatlistReducer,
         events: eventsReducer,
+        modules: modulesReducer,
     }),
     initialState,
     composeEnhancers(
@@ -75,3 +79,5 @@ chrome.alarms.create({ periodInMinutes: 1 });
 chrome.alarms.onAlarm.addListener(function () {
     console.log('Hello, world!', new Date())
 });
+
+// chrome.tabs.insertCSS({file:"theme-dark.css"});

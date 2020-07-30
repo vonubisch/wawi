@@ -16,3 +16,7 @@ body {
     height: 15px;
     overflow: hidden;
 }
+
+.ui.toggle.checkbox input:checked~label:before {
+    background-color: #00a651 !important;
+}

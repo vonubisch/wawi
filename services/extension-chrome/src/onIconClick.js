@@ -1,21 +1,23 @@
-import { Store, applyMiddleware } from 'webext-redux';
-import thunkMiddleware from 'redux-thunk';
-import reduxLogger from 'redux-logger';
+// import { Store, applyMiddleware } from 'webext-redux';
+// import thunkMiddleware from 'redux-thunk';
+// import reduxLogger from 'redux-logger';
 
-import actions from 'packages/core/redux/actions';
+// import actions from 'packages/core/redux/actions';
 
-const store = applyMiddleware(new Store() , ...[reduxLogger, thunkMiddleware]);
+// const store = applyMiddleware(new Store() , ...[reduxLogger, thunkMiddleware]);
 
-store.ready().then(() => {
+// store.ready().then(() => {
 
-    const dispatch = store.dispatch;
+//     const dispatch = store.dispatch;
 
-        dispatch(actions.chatlist.openChat({ 
-            name: 'Telegraaf',
-        })).then(() => 
-            dispatch(actions.chat.typeMessage({ 
-                message: 'test',
-            }))
-        );
+//         dispatch(actions.chatlist.openChat({ 
+//             name: 'Telegraaf',
+//         })).then(() => 
+//             dispatch(actions.chat.typeMessage({ 
+//                 message: 'test',
+//             }))
+//         );
 
-});
+// });
+
+chrome.runtime.sendMessage('show_ui'); // eslint-disable-line no-undef
